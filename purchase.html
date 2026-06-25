@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>购买产品 - 杰欣智能 | 官方网店</title>
+<style>
+  html { -webkit-user-select: none; user-select: none; }
+  body { -webkit-user-select: none; user-select: none; }
+  img { -webkit-user-drag: none; user-drag: none; pointer-events: auto; }
+
+  :root {
+    --red: #c41e3a;
+    --red-dark: #8b1a2b;
+    --red-deep: #5c0a14;
+    --gold: #d4a843;
+    --gold-light: #f0d68a;
+    --white: #fff;
+    --bg: #faf8f5;
+    --text: #222;
+    --text-gray: #666;
+    --text-light: #999;
+    --border: #e8e4dc;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "SimSun", "STSong", "Noto Serif CJK SC", "Songti SC", "Microsoft YaHei", serif;
+    color: var(--text);
+    background: var(--bg);
+    font-size: 16px;
+    line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ====== TOP BAR ====== */
+  .top-bar {
+    background: var(--red-deep);
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    text-align: center;
+    padding: 6px 20px;
+    letter-spacing: 2px;
+  }
+
+  /* ====== HEADER ====== */
+  .header {
+    background: linear-gradient(180deg, #fff 0%, #fefefe 100%);
+    border-bottom: 2px solid var(--red);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 20px;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+  .logo img { height: 42px; width: auto; }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+  .logo-text span { color: var(--red); font-weight: 400; font-size: 13px; margin-left: 6px; display: block; line-height: 1.3; }
+
+  .header-nav { display: flex; gap: 0; list-style: none; margin: 0; padding: 0; align-items: center; }
+  .header-nav > a {
+    display: block; padding: 22px 18px; font-size: 15px; color: #555;
+    text-decoration: none; border-bottom: 3px solid transparent;
+    transition: all 0.25s; white-space: nowrap; letter-spacing: 1px;
+    font-weight: 500; position: relative;
+  }
+  .header-nav > a::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: var(--red); transition: width 0.3s ease; }
+  .header-nav > a:hover { color: var(--red); background: rgba(196,30,58,0.03); }
+  .header-nav > a:hover::after { width: 100%; }
+  .header-nav > a.active { color: var(--red); font-weight: 700; }
+  .header-nav > a.active::after { width: 100%; }
+
+  /* ====== DROPDOWN ====== */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown .drop-trigger {
+    display: block; padding: 22px 18px; font-size: 15px; color: var(--red);
+    text-decoration: none; letter-spacing: 1px; font-weight: 700;
+    cursor: pointer; white-space: nowrap;
+    border-bottom: 3px solid var(--red);
+    transition: all 0.25s;
+  }
+  .nav-dropdown .drop-arrow { font-size: 10px; margin-left: 4px; transition: transform 0.25s; display: inline-block; }
+  .nav-dropdown:hover .drop-arrow { transform: rotate(180deg); }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0 0 8px 8px;
+    border-top: 3px solid var(--red);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    min-width: 140px;
+    z-index: 200;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .nav-dropdown:hover .dropdown-menu { display: flex; }
+  .dropdown-menu a {
+    display: block;
+    padding: 13px 24px;
+    font-size: 14px;
+    color: #555;
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f5f2ed;
+    white-space: nowrap;
+  }
+  .dropdown-menu a:last-child { border-bottom: none; }
+  .dropdown-menu a:hover {
+    background: rgba(196,30,58,0.05);
+    color: var(--red);
+    padding-left: 28px;
+  }
+  .dropdown-menu a .icon { margin-right: 8px; }
+
+  .header-menu-btn { display: none; background: none; border: none; font-size: 24px; color: var(--red-dark); cursor: pointer; padding: 6px; line-height: 1; }
+
+  /* ====== PAGE BANNER ====== */
+  .page-banner {
+    background: linear-gradient(135deg, var(--red-dark) 0%, var(--red-deep) 100%);
+    padding: 60px 20px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .page-banner h1 { font-size: 34px; letter-spacing: 6px; position: relative; font-weight: 700; }
+  .page-banner .en-sub { font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 3px; margin-top: 8px; position: relative; }
+
+  .divider-gold {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; margin: 20px auto 0; max-width: 320px; opacity: 0.5;
+  }
+  .divider-gold .d-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider-gold .d-star { color: var(--gold); font-size: 16px; }
+
+  /* ====== MAIN ====== */
+  .main-content { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+  /* ====== STORE SECTION ====== */
+  .section { padding: 60px 0; }
+
+  .store-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+
+  .store-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.35s;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+    position: relative;
+  }
+  .store-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(196,30,58,0.1);
+    border-color: var(--red);
+  }
+  .store-card-header {
+    padding: 36px 32px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .store-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+  .store-card-icon-img {
+    width: 72px; height: 72px;
+    margin: 0 auto 16px;
+    display: block;
+    object-fit: contain;
+    border-radius: 14px;
+  }
+  .store-card-header h3 { font-size: 20px; letter-spacing: 2px; color: var(--text); margin-bottom: 6px; }
+  .store-card-header .plat-desc { font-size: 13px; color: var(--text-light); letter-spacing: 1px; }
+
+  .store-card-body { padding: 0 32px 32px; text-align: center; }
+  .store-card-body .info-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; margin-bottom: 10px;
+    font-size: 14px; color: var(--text-gray); letter-spacing: 1px;
+  }
+  .store-card-body .info-row .dot {
+    width: 6px; height: 6px;
+    background: var(--red); border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .store-card-body .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 36px;
+    font-size: 15px;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 2px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .btn-ali {
+    background: linear-gradient(135deg, #ff6a00, #ee2c2c);
+    box-shadow: 0 4px 16px rgba(238,44,44,0.3);
+  }
+  .btn-ali:hover { box-shadow: 0 6px 24px rgba(238,44,44,0.45); transform: translateY(-2px); }
+  .btn-taobao {
+    background: linear-gradient(135deg, #ff5000, #ee5622);
+    box-shadow: 0 4px 16px rgba(255,80,0,0.3);
+  }
+  .btn-taobao:hover { box-shadow: 0 6px 24px rgba(255,80,0,0.45); transform: translateY(-2px); }
+
+  /* Coming soon style */
+  .store-card.coming-soon { opacity: 0.85; }
+  .store-card.coming-soon::before {
+    content: '即将上线';
+    position: absolute;
+    top: 12px; right: -28px;
+    background: var(--gold);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 36px;
+    transform: rotate(45deg);
+    letter-spacing: 2px;
+    z-index: 1;
+  }
+
+  /* ====== COMPANY INFO ====== */
+  .info-block {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px 40px;
+    margin-top: 40px;
+    display: flex; gap: 32px; align-items: flex-start;
+  }
+  .info-block .info-icon { flex-shrink: 0; width: 56px; height: 56px; background: var(--red); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; }
+  .info-block .info-content { flex: 1; }
+  .info-block .info-content h4 { font-size: 16px; color: var(--red-dark); letter-spacing: 2px; margin-bottom: 12px; }
+  .info-block .info-content p { font-size: 14px; color: var(--text-gray); line-height: 2; }
+
+  /* ====== 联系方式 ====== */
+  .contact-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .contact-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+  }
+  .contact-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .contact-card .contact-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+  }
+  .contact-card .contact-icon.phone { background: linear-gradient(135deg, #c41e3a, #e74c3c); color: #fff; }
+  .contact-card .contact-icon.service { background: linear-gradient(135deg, #d4a843, #e8c76a); color: #fff; }
+  .contact-card .contact-icon.boss { background: linear-gradient(135deg, #1e8449, #2ecc71); color: #fff; }
+  .contact-card h4 { font-size: 16px; color: var(--text); letter-spacing: 2px; margin-bottom: 10px; }
+  .contact-card .contact-qr {
+    width: 140px; height: 140px;
+    margin: 8px auto 10px;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    /* 二维码图片单独开放长按识别能力（覆盖全局 user-select:none / user-drag:none） */
+    pointer-events: auto;
+    -webkit-user-select: auto; user-select: auto;
+    -webkit-user-drag: auto; user-drag: auto;
+    -webkit-touch-callout: default;
+    touch-callout: default;
+    cursor: zoom-in;
+  }
+  .contact-card .contact-qr::selection { background: rgba(196,30,58,0.25); }
+  .contact-card p { font-size: 14px; color: var(--text-gray); line-height: 1.8; }
+
+  /* ====== FOOTER ====== */
+  .site-footer {
+    background: var(--red-deep);
+    color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    line-height: 2;
+    margin-top: 60px;
+  }
+  .site-footer strong { color: #fff; }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 768px) {
+    .top-bar { font-size: 11px; padding: 4px 10px; }
+    .header-nav { display: none; position: absolute; top: 68px; left: 0; right: 0; background: #fff; flex-direction: column; border-bottom: 2px solid var(--red); box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 99; }
+    .header-nav.open { display: flex; }
+    .header-nav > a { padding: 14px 20px; border-bottom: 1px solid #f0ece6; }
+    .header-nav > a::after { display: none; }
+    .header-menu-btn { display: block; }
+    .nav-dropdown { width: 100%; }
+    .nav-dropdown .drop-trigger { padding: 14px 20px; font-weight: 500; color: #555; border-bottom: 1px solid #f0ece6; }
+    .dropdown-menu { position: static; transform: none; border: none; border-radius: 0; box-shadow: none; display: none; border-top: none; background: #faf8f5; }
+    .nav-dropdown:hover .dropdown-menu { display: none; }
+    .nav-dropdown.open .dropdown-menu { display: flex; }
+    .dropdown-menu a { padding: 12px 20px 12px 36px; font-size: 13px; border-bottom: 1px solid #f0ece6; }
+    .page-banner h1 { font-size: 24px; }
+    .store-grid { grid-template-columns: 1fr; }
+    .store-card-header { padding: 28px 24px 20px; }
+    .store-card-body { padding: 0 24px 28px; }
+    .info-block { flex-direction: column; padding: 24px; }
+    .contact-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .store-card-icon { width: 64px; height: 64px; }
+    .store-card-icon svg { width: 34px; height: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== TOP BAR ====== -->
+<div class="top-bar">★ 官方正品 · 品质保障 · 售后无忧 — 杰欣智能官方网店 ★</div>
+
+<!-- ====== HEADER ====== -->
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="index.html">
+      <img src="images/logo-jxinit.png" alt="Jxinit 杰欣">
+      <div class="logo-text">杰欣智能<span>JieXin Intelligence</span></div>
+    </a>
+    <button class="header-menu-btn" id="menuBtn" onclick="toggleMenu()" title="菜单">☰</button>
+    <nav class="header-nav" id="headerNav">
+      <a href="index.html">首页</a>
+      <a href="products.html">应用产品</a>
+      <a href="about.html">走进杰欣</a>
+      <a href="tutorials.html">说明教程</a>
+      <div class="nav-dropdown" id="navBuy">
+        <a class="drop-trigger" href="purchase.html">购买产品 <span class="drop-arrow">▾</span></a>
+        <div class="dropdown-menu">
+          <a href="https://shop38j52j91c0773.1688.com/" target="_blank" title="1688官方店铺"><span class="icon">🏪</span> 1688 店铺</a>
+          <a href="https://shop283841690.taobao.com/category.htm?spm=pc_detail.30350276.shop_block.dentershop.4aa77dd63ZwIbq" target="_blank" class="taobao-link"><span class="icon">🛒</span> 淘宝店铺</a>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- ====== PAGE BANNER ====== -->
+<div class="page-banner">
+  <h1>购买产品</h1>
+  <div class="en-sub">OFFICIAL STORE</div>
+  <div class="divider-gold">
+    <span class="d-line"></span><span class="d-star">★</span><span class="d-line"></span>
+  </div>
+</div>
+
+<div class="main-content">
+
+<!-- ====== 在线店铺 ====== -->
+<div class="section">
+  <div class="store-grid">
+    <!-- 1688 -->
+    <div class="store-card">
+      <div class="store-card-header">
+        <img class="store-card-icon-img" src="images/icon-1688.png" alt="1688">
+        <h3>1688 官方店铺</h3>
+        <div class="plat-desc">alibaba.com.cn</div>
+      </div>
+      <div class="store-card-body">
+        <div class="info-row"><span class="dot"></span> 杰欣智能 · 源头工厂直供</div>
+        <div class="info-row"><span class="dot"></span> RFID通道门 · 会议签到系统</div>
+        <div class="info-row"><span class="dot"></span> 批量采购 · 价格优惠</div>
+        <div class="info-row"><span class="dot"></span> 专业客服 · 技术支持</div>
+        <a href="https://shop38j52j91c0773.1688.com/" target="_blank" class="btn btn-ali">进入 1688 店铺 →</a>
+      </div>
+    </div>
+
+    <!-- 淘宝 -->
+    <div class="store-card" id="taobao">
+      <div class="store-card-header">
+        <img class="store-card-icon-img" src="images/icon-taobao.png" alt="淘宝">
+        <h3>淘宝店铺</h3>
+        <div class="plat-desc">taobao.com</div>
+      </div>
+      <div class="store-card-body">
+        <div class="info-row"><span class="dot"></span> 杰欣智能 · 官方旗舰店</div>
+        <div class="info-row"><span class="dot"></span> 设备零售 · 便捷下单</div>
+        <div class="info-row"><span class="dot"></span> 官方质保 · 售后无忧</div>
+        <div class="info-row"><span class="dot"></span> 支付宝担保 · 安全交易</div>
+        <a href="https://shop283841690.taobao.com/category.htm?spm=pc_detail.30350276.shop_block.dentershop.4aa77dd63ZwIbq" target="_blank" class="btn btn-taobao">进入淘宝店铺</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 公司说明 -->
+  <div class="info-block">
+    <div class="info-icon">📋</div>
+    <div class="info-content">
+      <h4>购买须知</h4>
+      <p>泉州市杰欣智能科技有限公司（国家高新技术企业）专注RFID智能通道与会议签到系统研发生产，所有产品均为原厂直供，享受原厂质保及技术支持。如需批量采购或定制方案，欢迎联系客服获取专属报价。</p>
+    </div>
+  </div>
+
+  <!-- 联系方式 -->
+  <div class="contact-row">
+    <div class="contact-card">
+      <div class="contact-icon phone">📞</div>
+      <h4>电话咨询</h4>
+      <svg class="phone-illus" viewBox="0 0 120 80" style="margin:6px auto 10px;display:block;width:120px;height:80px;">
+        <rect x="45" y="15" width="30" height="50" rx="4" fill="none" stroke="#c41e3a" stroke-width="2"/>
+        <circle cx="60" cy="55" r="4" fill="#c41e3a"/>
+        <path d="M55 20 L65 20" stroke="#c41e3a" stroke-width="2"/>
+        <path d="M50 12 L50 20 M70 12 L70 20" stroke="#c41e3a" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="30" cy="40" r="8" fill="none" stroke="#d4a843" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="90" cy="40" r="8" fill="none" stroke="#d4a843" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="20" cy="60" r="5" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.4"/>
+        <circle cx="100" cy="60" r="5" fill="none" stroke="#d4a843" stroke-width="1" opacity="0.4"/>
+      </svg>
+      <p>13305958002<br>周一至周六 8:30-18:30</p>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon service">💬</div>
+      <h4>客服微信</h4>
+      <img class="contact-qr" src="images/qr-service.png" alt="客服微信" draggable="false">
+      <p>长按识别二维码</p>
+    </div>
+    <div class="contact-card">
+      <div class="contact-icon boss">💚</div>
+      <h4>老板微信</h4>
+      <img class="contact-qr" src="images/qr-boss.png" alt="老板微信" draggable="false">
+      <p>长按识别二维码</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer class="site-footer">
+  <strong>泉州市杰欣智能科技有限公司</strong><br>
+  地址：泉州市丰泽区法学路1号引航文创园3楼303<br>
+  © 2014-2026 JieXin Intelligence. All rights reserved.
+</footer>
+
+<script>
+function toggleMenu() {
+  var nav = document.getElementById('headerNav');
+  nav.classList.toggle('open');
+}
+// 移动端：点击购买产品下拉触发
+var dropTrigger = document.querySelector('.nav-dropdown .drop-trigger');
+if (dropTrigger) dropTrigger.addEventListener('click', function(e) {
+  if (window.innerWidth <= 768) {
+    e.preventDefault();
+    this.parentElement.classList.toggle('open');
+  }
+});
+</script>
+
+<!-- ========== 内容安全防护 ========== -->
+<script>
+(function(){
+  // 1. 禁止右键菜单（二维码图片除外：保留长按识别能力）
+  document.addEventListener('contextmenu', function(e){
+    if (e.target && e.target.closest && e.target.closest('.contact-card .contact-qr')) return;
+    e.preventDefault(); return false;
+  });
+
+  // 2. 禁止快捷键：Ctrl+C/V/S/U/P/Shift+I/J, F12
+  document.addEventListener('keydown', function(e){
+    if (e.keyCode === 123) { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+      e.preventDefault(); return false;
+    }
+    if (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83)) {
+      e.preventDefault(); return false;
+    }
+    if (e.ctrlKey && e.keyCode === 80) { e.preventDefault(); return false; }
+  });
+
+  // 3. Console 静默
+  console.clear();
+  console.log = function(){};
+  console.info = function(){};
+  console.warn = function(){};
+  console.error = function(){};
+  console.table = function(){};
+
+  // 4. 阻止拖拽
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); return false; });
+
+  // 5. 文本选中由 CSS user-select:none 控制
+
+  // 6. 阻止 Ctrl+C 复制
+  document.addEventListener('copy', function(e){ e.preventDefault(); return false; });
+  document.addEventListener('cut', function(e){ e.preventDefault(); return false; });
+
+  // 7. 打印保护
+  var _print = window.print;
+  window.print = function(){ alert('打印功能已禁用'); return false; };
+
+  // 8. 动态水印
+  (function(){
+    var wm = document.createElement('div');
+    var wmText = document.createElement('div');
+    function updateWatermark(){
+      var now = new Date();
+      var pad = function(n){ return ('0'+n).slice(-2); };
+      var time = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+      var date = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+      var ua = navigator.userAgent;
+      var browser = '?';
+      if (ua.indexOf('Edg') > -1) browser = 'Edge';
+      else if (ua.indexOf('Chrome') > -1) browser = 'Chrome';
+      else if (ua.indexOf('Firefox') > -1) browser = 'FF';
+      else if (ua.indexOf('Safari') > -1) browser = 'Safari';
+      var os = '?';
+      if (ua.indexOf('Win') > -1) os = 'Win';
+      else if (ua.indexOf('Mac') > -1) os = 'Mac';
+      else if (ua.indexOf('Linux') > -1 && ua.indexOf('Android') === -1) os = 'Linux';
+      else if (ua.indexOf('Android') > -1) os = 'Android';
+      else if (ua.indexOf('iPhone') > -1 || ua.indexOf('iPad') > -1) os = 'iOS';
+      wmText.textContent = '\u6770\u6b23\u667a\u80fd JXINIT \u00b7 ' + date + ' ' + time + ' \u00b7 ' + browser + '/' + os;
+    }
+    updateWatermark();
+    setInterval(updateWatermark, 60000);
+    wmText.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-35deg);font-size:14px;font-weight:700;color:#000;white-space:nowrap;letter-spacing:4px;';
+    wm.appendChild(wmText);
+    wm.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999999;opacity:0.015;background:repeating-linear-gradient(-35deg, transparent, transparent 120px, rgba(0,0,0,0.3) 120px, rgba(0,0,0,0.3) 240px);';
+    document.body.appendChild(wm);
+  })();
+})();
+</script>
+</body>
+</html>
